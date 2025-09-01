@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Museum Map Tour</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/museum_map.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="header-bg"></div>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                    <img src="assets/images/1st.jpg" alt="Logo" style="width:85px; height:auto;">
+                        <div class="logo-glow"></div>
+                    </div>
+                    <div class="logo-text">
+                        <h1>Liberation War Museum</h1>
+                        <span class="logo-subtitle">Digital Archive</span>
+                    </div>
+                </div>
+                <nav class="main-nav">
+                    <ul>
+                        <li><a href="index.html" class="nav-link">Home</a></li>
+                        <li><a href="index.html#exhibits" class="nav-link">Exhibits</a></li>
+                        <li><a href="index.html#collections" class="nav-link">Collections</a></li>
+                        <li><a href="index.html#about" class="nav-link">About</a></li>
+                        <li><a href="gallery.html" class="nav-link">Gallery</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <section class="museum-map-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Interactive Museum Map</h2>
+                <p class="section-subtitle">Click on the markers to discover artifacts</p>
+            </div>
+            <div class="map-interactive-container">
+                <img src="assets/images/1st.jpg" alt="Museum Floor Plan" id="museumMapImage" class="responsive-map">
+                <div id="mapMarkers" class="map-markers-container">
+                    <!-- Markers will be dynamically loaded by JS -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="gallery-display-section" class="gallery-display">
+        <div class="container">
+            <h2 id="gallery-name"></h2>
+            <p id="gallery-description"></p>
+            <div id="artifact-cards-container" class="artifact-cards">
+                <!-- Artifact cards will be dynamically loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <script src="js/artifacts.js"></script>
+    <script src="js/museum_map.js"></script>
+</body>
+</html>

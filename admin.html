@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Liberation War Museum Archive</title>
+    <meta name="description" content="Administrative panel for managing the Liberation War Museum Archive system">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <!-- Admin Header -->
+    <header class="admin-header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">
+                    <img src="assets/images/logo.png" alt="Logo" style="width:80px; height:auto;">
+                </div>
+                <div class="logo-text">
+                    <h1>Liberation War Museum</h1>
+                    <span>Admin Panel</span>
+                </div>
+            </div>
+            <div class="user-info">
+                <div class="user-details">
+                    <span id="adminName">Admin User</span>
+                    <span id="adminEmail"></span>
+                </div>
+                <button class="btn btn-outline" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+            </button>
+        </div>
+        </div>
+    </header>
+
+    <!-- Admin Navigation -->
+    <nav class="admin-nav">
+        <div class="nav-container">
+            <button class="nav-btn active" data-section="dashboard">
+                <i class="fas fa-tachometer-alt"></i>
+                        Dashboard
+            </button>
+            <button class="nav-btn" data-section="artifacts">
+                <i class="fas fa-archive"></i>
+                Artifact Management
+            </button>
+            <button class="nav-btn" data-section="users">
+                <i class="fas fa-users"></i>
+                User Management
+            </button>
+            <button class="nav-btn" data-section="reports">
+                <i class="fas fa-chart-bar"></i>
+                        Reports
+            </button>
+            <button class="nav-btn" data-section="logs">
+                <i class="fas fa-list-alt"></i>
+                System Logs
+            </button>
+            <!-- Artifact Gallery Section -->
+        <section id="artifactGallery" class="admin-section">
+            <div class="section-header">
+                <h2>Artifact Gallery</h2>
+        </div>
+        </nav>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="admin-section active">
+            <div class="section-header">
+                <h2>Dashboard</h2>
+                <p>Welcome to the Liberation War Museum Archive Administration Panel</p>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-archive"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="totalArtifacts">0</h3>
+                        <p>Total Artifacts</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="totalUsers">0</h3>
+                        <p>Registered Users</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="totalViews">0</h3>
+                        <p>Total Views</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-upload"></i>
+                </div>
+                    <div class="stat-content">
+                        <h3 id="recentUploads">0</h3>
+                        <p>Recent Uploads</p>
+                </div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <h3>Recent Activity</h3>
+                    <div id="recentActivity" class="activity-list">
+                        <!-- Activity items will be loaded here -->
+                    </div>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Quick Actions</h3>
+                    <div class="quick-actions">
+                        <button class="btn btn-primary" onclick="openUploadModal()">
+                            <i class="fas fa-plus"></i>
+                            Upload Artifact
+                        </button>
+                        <button class="btn btn-outline" onclick="openUserModal()">
+                            <i class="fas fa-user-plus"></i>
+                            Add User
+                        </button>
+                        <button class="btn btn-outline" onclick="showSection('reports')">
+                            <i class="fas fa-download"></i>
+                            Generate Report
+                        </button>
+                        </div>
+                        </div>
+            </div>
+        </section>
+
+        <!-- Artifact Management Section -->
+        <section id="artifacts" class="admin-section">
+            <div class="section-header">
+                <h2>Artifact Management</h2>
+                <button class="btn btn-primary" onclick="openUploadModal()">
+                    <i class="fas fa-plus"></i>
+                    Upload New Artifact
+                </button>
+            </div>
+            
+            <div class="filters-bar">
+                <div class="search-box">
+                    <input type="text" id="artifactSearch" placeholder="Search artifacts...">
+                    <button class="search-btn" aria-label="Search artifacts">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+                <div class="filter-options">
+                                        <select id="typeFilter" aria-label="Filter by artifact type">
+                        <option value="">All Types</option>
+                        <option value="document">Documents</option>
+                        <option value="weapon">Weapons</option>
+                        <option value="personal">Personal Items</option>
+                        <option value="photo">Photos</option>
+                    </select>
+                    <select id="dateFilter" aria-label="Filter by date">
+                        <option value="">All Dates</option>
+                        <option value="today">Today</option>
+                        <option value="week">This Week</option>
+                        <option value="month">This Month</option>
+                    </select>
+                    </div>
+                </div>
+            
+            <div class="table-container">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Collection No.</th>
+                            <th>Accession No.</th>
+                            <th>Object Collection date</th>
+                            <th>Donor</th>
+                            <th>Description</th>
+                            <th>Object type</th>
+                            <th>Object head</th>
+                            <th>Actions</th>
+                            </tr>
+                        </thead>
+                    <tbody id="artifactsTable">
+                        <!-- Artifacts will be loaded here -->
+                        </tbody>
+                    </table>
+            </div>
+        </section>
+
+        <!-- User Management Section -->
+        <section id="users" class="admin-section">
+            <div class="section-header">
+                <h2>User Management</h2>
+                <button class="btn btn-primary" onclick="openUserModal()">
+                    <i class="fas fa-user-plus"></i>
+                    Add New User
+                </button>
+            </div>
+            
+            <div class="table-container">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Created At</th>
+                            <th>Actions</th>
+                            </tr>
+                        </thead>
+                    <tbody id="usersTable">
+                        <!-- Users will be loaded here -->
+                        </tbody>
+                    </table>
+            </div>
+        </section>
+
+        <!-- Reports Section -->
+        <section id="reports" class="admin-section">
+            <div class="section-header">
+                <h2>Report Generation</h2>
+                <p>Generate detailed reports about artifacts and system usage</p>
+            </div>
+
+            <div class="filters-bar">
+                <div class="search-box">
+                    <input type="text" id="reportSearch" placeholder="Search reports...">
+                    <button class="search-btn" aria-label="Search reports">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="form-actions">
+                <button type="button" class="btn btn-primary" onclick="printReport()">
+                    <i class="fas fa-print"></i>
+                    Print Report
+                </button>
+                <button type="button" class="btn btn-outline" onclick="downloadReportAsExcel()">
+                    <i class="fas fa-file-excel"></i>
+                    Download Excel
+                </button>
+                <button type="button" class="btn btn-outline" onclick="loadReportsTable()">
+                    <i class="fas fa-sync-alt"></i>
+                    Refresh
+                </button>
+            </div>
+
+            <div class="table-container" style="overflow: auto;">
+                <table class="admin-table" id="reportsTable">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" data-column="collection_no" checked> Collection No. <button class="sort-btn" data-sort="collection_no"><i class="fas fa-sort"></i></button></th>
+                            <th><input type="checkbox" data-column="accession_no" checked> Accession No. <button class="sort-btn" data-sort="accession_no"><i class="fas fa-sort"></i></button></th>
+                            <th><input type="checkbox" data-column="object_head" checked> Object Head <button class="sort-btn" data-sort="object_head"><i class="fas fa-sort"></i></button></th>
+                            <th><input type="checkbox" data-column="object_type" checked> Object Type <button class="sort-btn" data-sort="object_type"><i class="fas fa-sort"></i></button></th>
+                            <th><input type="checkbox" data-column="donor" checked> Donor <button class="sort-btn" data-sort="donor"><i class="fas fa-sort"></i></button></th>
+                            <th><input type="checkbox" data-column="collection_date" checked> Collection Date <button class="sort-btn" data-sort="collection_date"><i class="fas fa-sort"></i></button></th>
+                            <th><input type="checkbox" data-column="description" checked> Description <button class="sort-btn" data-sort="description"><i class="fas fa-sort"></i></button></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Reports will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- System Logs Section -->
+        <section id="logs" class="admin-section">
+            <div class="section-header">
+                <h2>System Logs</h2>
+                <p>Monitor system activity and user actions</p>
+            </div>
+            
+            <div class="logs-container">
+                <div class="logs-filters">
+                    <select id="logActionFilter" aria-label="Filter by action type">
+                        <option value="">All Actions</option>
+                        <option value="User Login">User Login</option>
+                        <option value="User Logout">User Logout</option>
+                        <option value="Artifact Added">Artifact Added</option>
+                        <option value="Artifact Updated">Artifact Updated</option>
+                        <option value="Artifact Deleted">Artifact Deleted</option>
+                        <option value="User Added">User Added</option>
+                        <option value="User Updated">User Updated</option>
+                        <option value="User Deleted">User Deleted</option>
+                    </select>
+                    <button class="btn btn-outline" onclick="loadSystemLogs()">
+                        <i class="fas fa-sync-alt"></i>
+                        Refresh
+                    </button>
+                </div>
+                
+                <div class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Timestamp</th>
+                                <th>User Name</th>
+                                <th>Action</th>
+                                <th>Details</th>
+                            </tr>
+                        </thead>
+                        <tbody id="logsTableBody">
+                            <!-- Logs will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination-container" id="logsPagination">
+                    <!-- Pagination will be loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Artifact Gallery Section -->
+        <section id="artifactGallery" class="admin-section">
+            <div class="section-header">
+                <h2>Artifact Gallery</h2>
+                <p>Browse and view detailed information about artifacts.</p>
+            </div>
+
+            <div class="search-container dashboard-search" data-aos="fade-up" data-aos-delay="500">
+                <div class="search-box">
+                    <div class="search-input-group">
+                        <select class="search-dropdown" id="galleryArtifactSearchType" aria-label="Search by">
+                            <option value="name">Artifact Name</option>
+                            <option value="category">Category</option>
+                            <option value="date">Date</option>
+                            <option value="description">Description</option>
+                        </select>
+                        <input type="text" class="search-input" id="galleryArtifactSearchValue" placeholder="Search artifacts..." aria-label="Search value">
+                        <button class="search-btn" id="gallerySearchArtifactsBtn">
+                            <i class="fas fa-search"></i>
+                            Search
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="artifacts-grid" id="galleryArtifactsGrid">
+                <!-- Artifact cards will be loaded here by JavaScript -->
+            </div>
+
+            <div id="gallery-pagination-container" class="pagination-container">
+                <!-- Pagination will be loaded here by JavaScript -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Upload Artifact Modal -->
+    <div id="uploadModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Upload New Artifact</h2>
+                <button class="close-btn" onclick="closeUploadModal()">&times;</button>
+            </div>
+            <form id="uploadForm" enctype="multipart/form-data">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="collectionNumber">Collection Number *</label>
+                        <input type="text" id="collectionNumber" name="collection_no" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="accessionNumber">Accession Number *</label>
+                        <input type="text" id="accessionNumber" name="accession_no" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="collectionDate">Collection Date *</label>
+                        <input type="date" id="collectionDate" name="collection_date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="contributorName">Contributor Name *</label>
+                        <input type="text" id="contributorName" name="donor" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="objectType">Object Type *</label>
+                        <input type="text" id="objectType" name="object_type" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="objectHead">Object Head *</label>
+                        <input type="text" id="objectHead" name="object_head" required>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="description">Description *</label>
+                        <textarea id="description" name="description" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="measurement">Measurement</label>
+                        <input type="text" id="measurement" name="measurement">
+                    </div>
+                    <div class="form-group">
+                        <label for="galleryNumber">Gallery Number</label>
+                        <input type="text" id="galleryNumber" name="gallery_no">
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="foundPlace">Found Place Information</label>
+                        <input type="text" id="foundPlace" name="found_place">
+                    </div>
+                    <div class="form-group">
+                        <label for="experimentFormula">Experiment Formula</label>
+                        <input type="text" id="experimentFormula" name="experiment_formula">
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="significance">Significance Comment</label>
+                        <textarea id="significance" name="significance_comment" rows="2"></textarea>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="correction">Correction</label>
+                        <input type="text" id="correction" name="correction">
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="artifactImages">Artifact Images (Max 5 images) *</label>
+                        <input type="file" id="artifactImages" name="images" multiple accept="image/*" required>
+                        <small>Select up to 5 images for this artifact</small>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" onclick="closeUploadModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-upload"></i>
+                        Upload Artifact
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Artifact Modal -->
+    <div id="editArtifactModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Artifact</h2>
+                <button class="close-btn" onclick="closeEditArtifactModal()">&times;</button>
+            </div>
+            <form id="editArtifactForm" enctype=
+            
+            
+            "multipart/form-data">
+                <input type="hidden" id="editArtifactId" name="id">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="editCollectionNumber">Collection Number *</label>
+                        <input type="text" id="editCollectionNumber" name="collection_no" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editAccessionNumber">Accession Number *</label>
+                        <input type="text" id="editAccessionNumber" name="accession_no" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editCollectionDate">Collection Date *</label>
+                        <input type="date" id="editCollectionDate" name="collection_date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editContributorName">Contributor Name *</label>
+                        <input type="text" id="editContributorName" name="donor" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editObjectType">Object Type *</label>
+                        <input type="text" id="editObjectType" name="object_type" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editObjectHead">Object Head *</label>
+                        <input type="text" id="editObjectHead" name="object_head" required>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="editDescription">Description *</label>
+                        <textarea id="editDescription" name="description" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="editMeasurement">Measurement</label>
+                        <input type="text" id="editMeasurement" name="measurement">
+                    </div>
+                    <div class="form-group">
+                        <label for="editGalleryNumber">Gallery Number</label>
+                        <input type="text" id="editGalleryNumber" name="gallery_no">
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="editFoundPlace">Found Place Information</label>
+                        <input type="text" id="editFoundPlace" name="found_place">
+                    </div>
+                    <div class="form-group">
+                        <label for="editExperimentFormula">Experiment Formula</label>
+                        <input type="text" id="editExperimentFormula" name="experiment_formula">
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="editSignificance">Significance Comment</label>
+                        <textarea id="editSignificance" name="significance_comment" rows="2"></textarea>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="editCorrection">Correction</label>
+                        <input type="text" id="editCorrection" name="correction">
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="editArtifactImages">Artifact Images (Max 5 images)</label>
+                        <input type="file" id="editArtifactImages" name="images" multiple accept="image/*">
+                        <small>Select up to 5 images for this artifact (replaces existing images)</small>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" onclick="closeEditArtifactModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i>
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- User Modal -->
+    <div id="userModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New User</h2>
+                <button class="close-btn" onclick="closeUserModal()">&times;</button>
+            </div>
+            <form id="userForm">
+                <div class="form-group">
+                    <label for="userName">Full Name *</label>
+                    <input type="text" id="userName" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="userEmail">Email Address *</label>
+                    <input type="email" id="userEmail" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="userPassword">Password *</label>
+                    <input type="password" id="userPassword" name="password" required>
+                </div>
+                <div class="form-group">
+                    <label for="userRole">Role *</label>
+                    <select id="userRole" name="role" required>
+                        <option value="user">User</option>
+                        <option value="admin">Administrator</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" onclick="closeUserModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-user-plus"></i>
+                        Add User
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit User Modal -->
+    <div id="editUserModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit User</h2>
+                <button class="close-btn" onclick="closeEditUserModal()">&times;</button>
+            </div>
+            <form id="editUserForm">
+                <input type="hidden" id="editUserId" name="id">
+                <div class="form-group">
+                    <label for="editUserName">Full Name *</label>
+                    <input type="text" id="editUserName" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="editUserEmail">Email Address *</label>
+                    <input type="email" id="editUserEmail" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="editUserRole">Role *</label>
+                    <select id="editUserRole" name="role" required>
+                        <option value="user">User</option>
+                        <option value="admin">Administrator</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" onclick="closeEditUserModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i>
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Artifact Details Modal -->
+    <div id="artifactDetailsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="detailObjectHead">Artifact Details</h2>
+                <button class="close-btn" onclick="closeArtifactDetailsModal()">&times;</button>
+            </div>
+            <div class="artifact-details-content">
+                <div class="image-viewer">
+                    <img id="detailImage" src="" alt="Artifact Image">
+                    <div class.image-nav">
+                        <button class="nav-arrow left" id="prevImage"><i class="fas fa-chevron-left"></i></button>
+                        <button class="nav-arrow right" id="nextImage"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                    <div class="zoom-controls">
+                        <button id="zoomIn"><i class="fas fa-search-plus"></i></button>
+                        <button id="zoomOut"><i class="fas fa-search-minus"></i></button>
+                    </div>
+                </div>
+                <div class="details-text">
+                    <h3>General Information</h3>
+                    <p><strong>Collection No.:</strong> <span id="detailCollectionNo"></span></p>
+                    <p><strong>Accession No.:</strong> <span id="detailAccessionNo"></span></p>
+                    <p><strong>Object Type:</strong> <span id="detailObjectType"></span></p>
+                    <p><strong>Donor:</strong> <span id="detailDonor"></span></p>
+                    <p><strong>Collection Date:</strong> <span id="detailCollectionDate"></span></p>
+                    <p><strong>Measurement:</strong> <span id="detailMeasurement"></span></p>
+                    <p><strong>Gallery No.:</strong> <span id="detailGalleryNo"></span></p>
+                    <p><strong>Found Place:</strong> <span id="detailFoundPlace"></span></p>
+                    <p><strong>Experiment Formula:</strong> <span id="detailExperimentFormula"></span></p>
+                    <p><strong>Significance Comment:</strong> <span id="detailSignificanceComment"></span></p>
+                    <p><strong>Correction:</strong> <span id="detailCorrection"></span></p>
+                    <h3>Description</h3>
+                    <p id="detailDescription"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+
+    <!-- Notification Container -->
+    <div id="notificationContainer" class="notification-container"></div>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visitor Dashboard - Liberation War Museum</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Poppins:wght@300;400;500;600;700&family=Crimson+Text:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/visitor_dashboard.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="main-header">
+        <div class="header-bg"></div>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                    <img src="assets/images/logo.png" alt="Logo" style="width:80px; height:auto;">
+                    </div>
+                    <div class="logo-text">
+                        <h1>Visitor Dashboard</h1>
+                        <span class="logo-subtitle">Liberation War Museum</span>
+                    </div>
+                </div>
+                <nav class="main-nav">
+                    <ul>
+                        <li><a href="#" class="nav-link active" id="artifact-gallery-tab">Artifact Gallery</a></li>
+                        <li><a href="#" class="nav-link" id="profile-settings-tab">Profile Settings</a></li>
+                        <li><a href="#" class="nav-link" id="logout-button"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                    </ul>
+                </nav>
+                <div class="mobile-menu-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container dashboard-main">
+        <section id="artifact-gallery" class="tab-content active">
+            <div class="section-header">
+                <h2 class="section-title">Artifact Gallery</h2>
+                <p class="section-subtitle">Explore the museum's collection of historical artifacts.</p>
+            </div>
+
+            <div class="search-container dashboard-search" data-aos="fade-up" data-aos-delay="500">
+                <div class="search-box">
+                    <div class="search-input-group">
+                        <select class="search-dropdown" id="artifactSearchType" aria-label="Search by">
+                            <option value="name">Artifact Name</option>
+                            <option value="category">Category</option>
+                            <option value="date">Date</option>
+                            <option value="description">Description</option>
+                        </select>
+                        <input type="text" class="search-input" id="artifactSearchValue" placeholder="Search artifacts..." aria-label="Search value">
+                        <button class="search-btn" id="searchArtifactsBtn">
+                            <i class="fas fa-search"></i>
+                            Search
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="artifacts-grid">
+                <!-- Artifact cards will be loaded here by JavaScript -->
+            </div>
+
+            <div id="pagination-container" class="pagination-container">
+                <!-- Pagination will be loaded here by JavaScript -->
+            </div>
+        </section>
+
+        <section id="profile-settings" class="tab-content">
+            <div class="section-header">
+                <h2 class="section-title">Profile Settings</h2>
+                <p class="section-subtitle">Manage your personal information and preferences.</p>
+            </div>
+            <div class="profile-form-container">
+                <!-- Profile settings form/details will go here -->
+                <form id="profileSettingsForm">
+                    <div class="form-group">
+                        <label for="userName">Name:</label>
+                        <input type="text" id="userName" class="form-control" value="John Doe" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="userEmail">Email:</label>
+                        <input type="email" id="userEmail" class="form-control" value="john.doe@example.com" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="userPassword">Password:</label>
+                        <input type="password" id="userPassword" class="form-control" value="********" readonly>
+                        <button type="button" class="btn btn-primary btn-sm">Change Password</button>
+                    </div>
+                    <!-- Add more profile fields as needed -->
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-bg-pattern"></div>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <div class="footer-logo-icon">
+                            <i class="fas fa-landmark"></i>
+                        </div>
+                        <div class="footer-logo-text">
+                            <h3>Liberation War Museum</h3>
+                            <span>Digital Archive</span>
+                        </div>
+                    </div>
+                    <p>Preserving the memory of each new source and the journey to freedom. Our digital archive serves as a bridge between the past and future generations.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#home"><i class="fas fa-home"></i> Home</a></li>
+                        <li><a href="#exhibits"><i class="fas fa-search"></i> Exhibits</a></li>
+                        <li><a href="#collections"><i class="fas fa-archive"></i> Collections</a></li>
+                        <li><a href="#about"><i class="fas fa-info-circle"></i> About Us</a></li>
+                        <li><a href="#contact"><i class="fas fa-envelope"></i> Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Information</h3>
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div>
+                                <strong>Address</strong>
+                                <p>5 Segun Bagicha, Dhaka 1000, Bangladesh</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <div>
+                                <strong>Phone</strong>
+                                <p>+880 XXXX-XXXXXX</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <div>
+                                <strong>Email</strong>
+                                <p>info@liberationwarmuseum.org</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-clock"></i>
+                            <div>
+                                <strong>Hours</strong>
+                                <p>Mon-Sat: 9:00 AM - 5:00 PM</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Newsletter</h3>
+                    <p>Stay updated with our latest exhibitions and events</p>
+                    <div class="newsletter-form">
+                        <input type="email" placeholder="Enter your email" class="newsletter-input">
+                        <button class="newsletter-btn" aria-label="Subscribe to newsletter">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <p>&copy; 2025 Liberation War Museum. All rights reserved.</p>
+                    <div class="footer-bottom-links">
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms of Service</a>
+                        <a href="#">Accessibility</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Artifact Modal -->
+    <div id="artifactModal" class="modal artifact-modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeArtifactModal()">&times;</span>
+            <div id="artifactModalBody"></div>
+        </div>
+    </div>
+
+    <script src="js/visitor_dashboard.js"></script>
+</body>
+</html>

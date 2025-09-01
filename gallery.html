@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artifact Details</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="header-bg"></div>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo" data-aos="fade-right">
+                    <div class="logo-icon">
+                    <img src="assets/images/logo.png" alt="Logo" style="width:85px; height:auto;">
+                        <div class="logo-glow"></div>
+                    </div>
+                    <div class="logo-text">
+                        <h1>Liberation War Museum</h1>
+                        <span class="logo-subtitle">Digital Archive</span>
+                    </div>
+                </div>
+                <nav class="main-nav" data-aos="fade-down">
+                    <ul>
+                        <li><a href="index.html" class="nav-link">Home</a></li>
+                        <li><a href="index.html#exhibits" class="nav-link">Exhibits</a></li>
+                        <li><a href="index.html#collections" class="nav-link">Collections</a></li>
+                        <li><a href="index.html#about" class="nav-link">About</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <section class="artifact-details-section">
+        <div class="container">
+            <div class="artifact-details-content">
+                <div class="artifact-image-gallery">
+                    <div class="main-image">
+                        <img src="assets/images/img1.jpg" alt="Artifact Image" id="mainArtifactImage">
+                    </div>
+                    <div class="thumbnail-images">
+                        <img src="assets/images/img1.jpg" alt="Artifact Thumbnail" class="thumbnail active" onclick="changeImage('assets/images/img1.jpg')">
+                        <img src="assets/images/img2.jpg" alt="Artifact Thumbnail" class="thumbnail" onclick="changeImage('assets/images/img2.jpg')">
+                        <img src="assets/images/img3.jpg" alt="Artifact Thumbnail" class="thumbnail" onclick="changeImage('assets/images/img3.jpg')">
+                    </div>
+                </div>
+                <div class="artifact-info">
+                    <h2>Ancient Pottery</h2>
+                    <p><strong>Date:</strong> 1200 BC</p>
+                    <p><strong>Origin:</strong> Mohasthangarh</p>
+                    <p>This is a fine example of ancient pottery, showcasing the craftsmanship of the time. The intricate designs and the quality of the material are remarkable.</p>
+                    <button class="btn btn-primary" onclick="zoomIn()">Zoom In</button>
+                    <button class="btn btn-primary" onclick="zoomOut()">Zoom Out</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2025 Liberation War Museum. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/gallery.js"></script>
+</body>
+</html>

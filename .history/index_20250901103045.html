@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>War Museum of Bangladesh</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Slideshow Section -->
+    <div class="slideshow-container">
+        <div class="mySlides fade">
+            <img src="image1.jpg" style="width:100%">
+        </div>
+        <div class="mySlides fade">
+            <img src="image2.jpg" style="width:100%">
+        </div>
+        <div class="mySlides fade">
+            <img src="image3.jpg" style="width:100%">
+        </div>
+    </div>
+
+    <!-- Explore Our Artifact Section -->
+    <section id="explore">
+        <h2>Explore Our Artifact</h2>
+        <div id="map-container">
+            <img src="map.jpg" alt="2D Map" id="map">
+            <div class="gallery" id="gallery1" onclick="redirectToGallery('gallery1')"></div>
+            <div class="gallery" id="gallery2" onclick="redirectToGallery('gallery2')"></div>
+            <!-- Add more galleries as needed -->
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>
+

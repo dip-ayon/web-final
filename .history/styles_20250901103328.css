@@ -1,0 +1,103 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+/* Slideshow */
+.slideshow-container {
+    position: relative;
+    max-width: 100%;
+    margin-bottom: 30px;
+}
+
+.mySlides {
+    display: none;
+    width: 100%;
+}
+
+.mySlides img {
+    width: 100%;
+    height: auto;
+}
+
+/* Explore Our Artifact Section */
+#explore {
+    padding: 20px;
+    text-align: center;
+}
+
+#map-container {
+    position: relative;
+    width: 100%;
+    display: inline-block;
+    text-align: center;
+}
+
+#map {
+    width: 100%;
+    border: 2px solid #000;
+}
+
+.gallery {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background-color: rgba(255, 0, 0, 0.5);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.gallery:hover {
+    transform: scale(1.1);
+}
+
+/* Positioning the Galleries on the 2D map */
+#gallery1 {
+    top: 100px;
+    left: 150px;
+}
+
+#gallery2 {
+    top: 200px;
+    left: 300px;
+}
+
+/* Gallery Page Styling */
+#gallery-details {
+    padding: 20px;
+    text-align: center;
+}
+
+#gallery-details img {
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    margin: 20px 0;
+}
+
+#3d-model {
+    margin: 20px 0;
+}
+
+/* 3D Model Viewer (Optional) */
+iframe {
+    border: none;
+    margin: 20px 0;
+}
+
+/* Styling for the Artifact images on Gallery Page */
+#gallery-details img {
+    margin: 10px;
+    max-width: 90%;
+    border: 1px solid #ddd;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}

@@ -1,0 +1,222 @@
+
+.map-section {
+    padding: 60px 0;
+    background: transparent;
+}
+
+.map-section header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 25px;
+    background: transparent;
+    border-radius: 15px;
+}
+
+.map-section h1 {
+    font-size: 2.8rem;
+    margin-bottom: 10px;
+    color: #000;
+}
+
+.map-section .description {
+    font-size: 1.2rem;
+    max-width: 800px;
+    margin: 0 auto;
+    color: #000;
+}
+
+.map-container {
+    position: relative;
+    margin: 30px auto;
+    background: transparent;
+    border-radius: 15px;
+    overflow: hidden;
+    padding: 25px;
+}
+
+.map-image {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    background: url('../assets/images/img1.jpg');
+    background-size: cover;
+    background-position: center;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.map-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border-radius: 10px;
+}
+
+.point {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    background: #f1c40f;
+    background: radial-gradient(circle, #f1c40f 0%, #f39c12 100%);
+    border: 3px solid #fff;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 15px rgba(241, 196, 15, 0.8);
+    transition: all 0.3s ease;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 16px;
+}
+
+.point:hover {
+    transform: scale(1.3);
+    box-shadow: 0 0 25px rgba(241, 196, 15, 1);
+}
+
+.point::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(241, 196, 15, 0.4);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s ease, height 0.3s ease;
+}
+
+.point:hover::after {
+    width: 50px;
+    height: 50px;
+}
+
+.point-label {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 8px 15px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 20;
+    white-space: nowrap;
+    color: #fff;
+    border: 1px solid #f1c40f;
+}
+
+.point:hover .point-label {
+    opacity: 1;
+}
+
+.details-panel {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 600px;
+    background: linear-gradient(to bottom right, #2c3e50, #34495e);
+    border-radius: 15px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+    z-index: 100;
+    padding: 30px;
+    border: 2px solid #f1c40f;
+}
+
+.details-content h2 {
+    color: #f1c40f;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid rgba(241, 196, 15, 0.3);
+    font-size: 28px;
+}
+
+.details-content p {
+    margin-bottom: 25px;
+    line-height: 1.7;
+    font-size: 18px;
+}
+
+.location-image {
+    width: 100%;
+    height: 200px;
+    background-color: #34495e;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #f1c40f;
+    font-size: 20px;
+    border: 1px solid #f1c40f;
+}
+
+.close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    background: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 22px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.close-btn:hover {
+    background: #ff6b6b;
+    transform: rotate(90deg);
+}
+
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 90;
+    backdrop-filter: blur(5px);
+}
+
+.legend {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+}
+
+.legend-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #f1c40f;
+}

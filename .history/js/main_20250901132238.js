@@ -119,183 +119,18 @@ function wireMapPointsToArtifacts() {
 
 async function loadArtifactsByGallery(galleryKey) {
     try {
-        // For now, use dummy data since backend might not be ready
-        const artifacts = getDummyGalleryArtifacts(galleryKey);
-        renderGalleryArtifacts(artifacts, galleryKey);
-        
-        // Uncomment when backend is ready:
-        // const response = await fetch(`php/api.php?action=get_artifacts_by_gallery&gallery=${encodeURIComponent(galleryKey)}`);
-        // const data = await response.json();
-        // let artifacts = Array.isArray(data?.artifacts) ? data.artifacts : [];
-        // if (artifacts.length === 0) {
-        //     artifacts = getDummyGalleryArtifacts(galleryKey);
-        // }
-        // renderGalleryArtifacts(artifacts, galleryKey);
-    } catch (error) {
-        console.log('Using fallback data:', error);
-        const artifacts = getDummyGalleryArtifacts(galleryKey);
-        renderGalleryArtifacts(artifacts, galleryKey);
+        // Assumes backend supports gallery filtering by id or name
+        const response = await fetch(`php/api.php?action=get_artifacts_by_gallery&gallery=${encodeURIComponent(galleryKey)}`);
+        const data = await response.json();
+        if (data && Array.isArray(data.artifacts)) {
+            displayArtifacts(data.artifacts);
+        } else {
+            // Fallback: show none or all
+            displayArtifacts([]);
+        }
+    } catch (_) {
+        displayArtifacts([]);
     }
-}
-
-function getDummyGalleryArtifacts(galleryKey) {
-    // Dummy data for Liberation War Museum artifacts
-    const allArtifacts = {
-        'gallery1': [
-            {
-                id: '1',
-                title: "Freedom Fighter's Personal Diary",
-                description: "A handwritten diary documenting the liberation struggle",
-                image: "assets/images/img1.jpg"
-            },
-            {
-                id: '2',
-                title: "Mukti Bahini Uniform",
-                description: "Original uniform worn by freedom fighters",
-                image: "assets/images/img2.jpg"
-            },
-            {
-                id: '3',
-                title: "Liberation War Documents",
-                description: "Official documents from the war period",
-                image: "assets/images/img3.jpg"
-            },
-            {
-                id: '4',
-                title: "War Photographs",
-                description: "Historical photographs from 1971",
-                image: "assets/images/img4.jpg"
-            },
-            {
-                id: '5',
-                title: "Radio Equipment",
-                description: "Communication equipment used during the war",
-                image: "assets/images/img5.jpg"
-            },
-            {
-                id: '6',
-                title: "Liberation War Medals",
-                description: "Medals awarded to freedom fighters",
-                image: "assets/images/img1.jpg"
-            }
-        ],
-        'gallery2': [
-            {
-                id: '7',
-                title: "Historical Weapons",
-                description: "Weapons used during the liberation war",
-                image: "assets/images/img2.jpg"
-            },
-            {
-                id: '8',
-                title: "War Maps",
-                description: "Strategic maps from the liberation period",
-                image: "assets/images/img3.jpg"
-            },
-            {
-                id: '9',
-                title: "Freedom Fighter Letters",
-                description: "Personal letters from the war period",
-                image: "assets/images/img4.jpg"
-            }
-        ],
-        'gallery3': [
-            {
-                id: '10',
-                title: "Liberation War Artifacts",
-                description: "Various artifacts from the liberation struggle",
-                image: "assets/images/img5.jpg"
-            },
-            {
-                id: '11',
-                title: "Historical Newspapers",
-                description: "Newspapers from the liberation period",
-                image: "assets/images/img1.jpg"
-            },
-            {
-                id: '12',
-                title: "War Memorabilia",
-                description: "Personal items from freedom fighters",
-                image: "assets/images/img2.jpg"
-            }
-        ]
-    };
-    
-    return allArtifacts[galleryKey] || allArtifacts['gallery1'];
-}
-
-function getGalleryMeta(galleryKey) {
-    const galleryMeta = {
-        'gallery1': {
-            title: "Archaeology Collections",
-            description: "After the Indus Valley Civilization, India came into the age of different rulers and dynasties. During the ancient and medieval period of Indian history, many dynasties like the Maurya, Shunga, Satavahana, Kushana, Gupta, Vardhanas, Pratiharas (in the north), Palas, Sena (in the east), Maitrakas (in the west), Chola, Chalukya, Hoysalas, Vijayanagar, Nayakas (in the south) has emerged in a different part of India. Various type of art was patronized during this period which includes religious structures, Fort, Mausoleums, and sculptures made of different materials etc. Many selected examples of various art style, which flourished simultaneously in different regions are exhibited in the \"Maurya, Sunga and Satavahana Art\", \"Kushan and Ikshvaku Art\", \"Gupta Art, Early and late Medieval Art\" Galleries of National Museum, Delhi."
-        },
-        'gallery2': {
-            title: "Liberation War Gallery",
-            description: "This gallery showcases artifacts and documents from the Liberation War of Bangladesh in 1971. It includes personal items, weapons, documents, and photographs that tell the story of the struggle for independence."
-        },
-        'gallery3': {
-            title: "Historical Documents Gallery",
-            description: "A collection of important historical documents, letters, and newspapers from the liberation period. These artifacts provide insight into the political and social context of the time."
-        }
-    };
-    
-    return galleryMeta[galleryKey] || galleryMeta['gallery1'];
-}
-
-function renderGalleryArtifacts(artifacts, galleryKey) {
-    const section = document.getElementById('galleryArtifactsSection');
-    const title = document.getElementById('galleryArtifactsTitle');
-    const desc = document.getElementById('galleryArtifactsDesc');
-    const galleryContainer = document.getElementById('gallerySlideshow'); // This is actually the card container now
-    const prevBtn = document.getElementById('galleryPrevBtn');
-    const nextBtn = document.getElementById('galleryNextBtn');
-    if (!section || !galleryContainer) return;
-
-    const galleryMeta = getGalleryMeta(galleryKey);
-    title.textContent = galleryMeta.title;
-    if (desc) desc.textContent = galleryMeta.description;
-    section.style.display = 'block';
-
-    galleryContainer.innerHTML = '';
-    galleryContainer.className = 'gallery-card-container';
-
-    artifacts.forEach((artifact, index) => {
-        const card = document.createElement('div');
-        card.className = 'gallery-artifact-card';
-        card.innerHTML = `
-            <div class="artifact-img">
-                <img src="${artifact.image}" alt="${artifact.title}" onclick="redirectToArtifactDetail(${index})">
-            </div>
-            <div class="artifact-info">
-                <h3>${artifact.title}</h3>
-                <p>${artifact.description}</p>
-            </div>
-        `;
-        galleryContainer.appendChild(card);
-    });
-
-    // Show/hide navigation buttons
-    if (prevBtn) prevBtn.style.display = 'flex';
-    if (nextBtn) nextBtn.style.display = 'flex';
-
-    window.galleryScroll = function(direction) {
-        galleryContainer.scrollBy({
-            left: direction * 320, // Adjust scroll distance as needed
-            behavior: 'smooth'
-        });
-    };
-
-    // Replace the onclick handlers for the buttons
-    if(prevBtn) prevBtn.setAttribute('onclick', 'galleryScroll(-1)');
-    if(nextBtn) nextBtn.setAttribute('onclick', 'galleryScroll(1)');
-
-    window.redirectToArtifactDetail = function(index) {
-        const artifact = artifacts[index];
-        if (artifact) {
-            window.location.href = `artifact_detail.html?id=${artifact.id || index}&title=${encodeURIComponent(artifact.title)}`;
-        }
-    };
 }
 
 // Slideshow functionality
@@ -403,7 +238,7 @@ function startSlideshow() {
     const slides = document.querySelectorAll('.slides');
     const indicators = document.querySelectorAll('.indicator');
     
-    if (slides.length === 0) return; 
+    if (slides.length === 0) return;
     
     function showSlide(index) {
         slides.forEach(slide => slide.classList.remove('active'));
@@ -437,7 +272,7 @@ window.plusSlides = function(n) {
     const slides = document.querySelectorAll('.slides');
     const indicators = document.querySelectorAll('.indicator');
     
-    if (slides.length === 0) return; 
+    if (slides.length === 0) return;
     
     currentSlideIndex = (currentSlideIndex + n + slides.length) % slides.length;
     
@@ -462,7 +297,7 @@ window.currentSlide = function(n) {
     const slides = document.querySelectorAll('.slides');
     const indicators = document.querySelectorAll('.indicator');
     
-    if (slides.length === 0) return; 
+    if (slides.length === 0) return;
     
     currentSlideIndex = n - 1;
     
@@ -693,146 +528,388 @@ function filterArtifacts(filter) {
     loadArtifacts(filter);
 }
 
-async function loadArtifacts() {
+async function loadArtifacts(filter = 'all') {
     try {
-        const response = await fetch('php/api.php?action=get_artifacts');
-        const data = await response.json();
-        
-        if (data && Array.isArray(data.artifacts)) {
-            renderFeaturedArtifactsAsCards(data.artifacts);
-        } else {
-            // Fallback: use dummy data
-            const dummyArtifacts = [
-                {
-                    id: 1,
-                    title: "Freedom Fighter's Diary",
-                    description: "Personal diary from the liberation war",
-                    image: "assets/images/img1.jpg"
-                },
-                {
-                    id: 2,
-                    title: "Mukti Bahini Uniform",
-                    description: "Original uniform worn by freedom fighters",
-                    image: "assets/images/img2.jpg"
-                },
-                {
-                    id: 3,
-                    title: "Liberation War Documents",
-                    description: "Official documents from 1971",
-                    image: "assets/images/img3.jpg"
-                },
-                {
-                    id: 4,
-                    title: "Historical Photographs",
-                    description: "Rare photographs from the war period",
-                    image: "assets/images/img4.jpg"
-                },
-                {
-                    id: 5,
-                    title: "War Memorabilia",
-                    description: "Personal items from freedom fighters",
-                    image: "assets/images/img5.jpg"
-                }
-            ];
-            renderFeaturedArtifactsAsCards(dummyArtifacts);
+        let url = 'php/api.php?action=get_top_visited_artifacts'; // Default to top visited
+        if (filter !== 'all') {
+            url = `php/api.php?action=search_artifacts&type=object_type&value=${filter}`;
         }
+        const response = await fetch(url);
+        const data = await response.json();
+
+        displayArtifacts(data.artifacts);
     } catch (error) {
         console.error('Failed to load artifacts:', error);
-        // Use dummy data as fallback
-        const dummyArtifacts = [
-            {
-                id: 1,
-                title: "Freedom Fighter's Diary",
-                description: "Personal diary from the liberation war",
-                image: "assets/images/img1.jpg"
-            },
-            {
-                id: 2,
-                title: "Mukti Bahini Uniform",
-                description: "Original uniform worn by freedom fighters",
-                image: "assets/images/img2.jpg"
-            },
-            {
-                id: 3,
-                title: "Liberation War Documents",
-                description: "Official documents from 1971",
-                image: "assets/images/img3.jpg"
-            },
-            {
-                id: 4,
-                title: "Historical Photographs",
-                description: "Rare photographs from the war period",
-                image: "assets/images/img4.jpg"
-            },
-            {
-                id: 5,
-                title: "War Memorabilia",
-                description: "Personal items from freedom fighters",
-                image: "assets/images/img5.jpg"
-            }
-        ];
-        renderFeaturedArtifactsAsCards(dummyArtifacts);
     }
 }
 
-function renderFeaturedArtifactsAsCards(artifacts) {
-    const container = document.querySelector('.featured-slideshow');
-    if (!container) return;
 
-    container.innerHTML = '';
-    container.className = 'gallery-card-container';
-    
-    artifacts.forEach((artifact, index) => {
-        const card = document.createElement('div');
-        card.className = 'gallery-artifact-card';
-        card.innerHTML = `
-            <div class="artifact-img">
-                <img src="${artifact.image}" alt="${artifact.title}" onclick="redirectToArtifactDetail(${index})">
-            </div>
-            <div class="artifact-info">
-                <h3>${artifact.title}</h3>
-                <p>${artifact.description}</p>
+function displayArtifacts(artifacts) {
+    const grid = document.getElementById('artifactsGrid');
+    if (!grid) return;
+
+    if (artifacts.length === 0) {
+        grid.innerHTML = `
+            <div class="no-results">
+                <i class="fas fa-search"></i>
+                <h3>No artifacts found</h3>
+                <p>Try adjusting your search criteria</p>
             </div>
         `;
-        container.appendChild(card);
-    });
+        return;
+    }
+
+    grid.innerHTML = artifacts.map(artifact => `
+        <div class="artifact-card" data-aos="fade-up" onclick="viewArtifact(${artifact.id})">
+            <div class="artifact-img">
+                <img src="assets/images/${artifact.images[0]}" alt="${artifact.object_head || 'Artifact'}">
+                <div class="artifact-overlay">
+                    <button class="btn btn-primary">
+                        <i class="fas fa-eye"></i>
+                        View Details
+                    </button>
+                </div>
+            </div>
+            <div class="artifact-info">
+                <h3>${artifact.object_head || 'Unnamed Artifact'}</h3>
+                <div class="artifact-meta">
+                    <span><i class="fas fa-hashtag"></i> ${artifact.collection_no}</span>
+                    <span><i class="fas fa-user"></i> ${artifact.donor || 'Unknown'}</span>
+                </div>
+                <p>${artifact.description ? artifact.description.substring(0, 100) + '...' : 'No description available'}</p>
+                <div class="artifact-tags">
+                    <span class="tag">${artifact.object_type || 'Unknown Type'}</span>
+                    <span class="tag">${artifact.collection_date || 'Unknown Date'}</span>
+                </div>
+            </div>
+        </div>
+    `).join('');
 }
 
-function getArtifactImage(artifact) {
-    // This function would typically fetch the image URL from an API
-    // For now, it returns a placeholder or a default image
-    return artifact.image || 'assets/images/placeholder.jpg';
+
+function updateResultCount(count) {
+    const resultCount = document.getElementById('resultCount');
+    if (resultCount) {
+        resultCount.textContent = count;
+    }
 }
 
-function changeFeaturedSlide(direction) {
-    const slides = document.querySelectorAll('.featured-slide');
-    if (slides.length === 0) return;
+async function viewArtifact(id) {
+    try {
+        const response = await fetch(`php/api.php?action=get_artifact_by_id&id=${id}`);
+        const artifact = await response.json();
 
-    let currentIndex = 0;
-    slides.forEach((slide, index) => {
-        if (slide.classList.contains('active')) {
-            currentIndex = index;
+        if (artifact) {
+            const modal = document.getElementById('artifactModal');
+            const modalBody = document.getElementById('artifactModalBody');
+
+            let imagesHtml = '';
+            if (artifact.images && artifact.images.length > 0) {
+                imagesHtml = artifact.images.map(image => `<img src="assets/images/${image}" alt="${artifact.object_head}" class="img-fluid mb-2">`).join('');
+            }
+
+            modalBody.innerHTML = `
+                <h2>${artifact.object_head}</h2>
+                <div class="row">
+                    <div class="col-md-6">
+                        ${imagesHtml}
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Collection No:</strong> ${artifact.collection_no}</p>
+                        <p><strong>Accession No:</strong> ${artifact.accession_no}</p>
+                        <p><strong>Collection Date:</strong> ${artifact.collection_date}</p>
+                        <p><strong>Donor:</strong> ${artifact.donor}</p>
+                        <p><strong>Object Type:</strong> ${artifact.object_type}</p>
+                        <p><strong>Description:</strong> ${artifact.description}</p>
+                        <p><strong>Measurement:</strong> ${artifact.measurement}</p>
+                        <p><strong>Gallery No:</strong> ${artifact.gallery_no}</p>
+                        <p><strong>Found Place:</strong> ${artifact.found_place}</p>
+                        <p><strong>Significance/Comment:</strong> ${artifact.significance_comment}</p>
+                    </div>
+                </div>
+            `;
+            modal.style.display = 'block';
+            addLog('View Artifact', `Visitor viewed artifact with ID ${id}`);
+        }
+    } catch (error) {
+        console.error('Failed to load artifact details:', error);
+    }
+}
+
+function closeArtifactModal() {
+    const modal = document.getElementById('artifactModal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+
+// Utility functions
+function showNotification(message, type = 'info') {
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.innerHTML = `
+        <i class="fas fa-${getNotificationIcon(type)}"></i>
+        <span>${message}</span>
+        <button onclick="this.parentElement.remove()">
+            <i class="fas fa-times"></i>
+        </button>
+    `;
+
+    // Add to page
+    document.body.appendChild(notification);
+
+    // Animate in
+    setTimeout(() => notification.classList.add('show'), 100);
+
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => notification.remove(), 300);
+    }, 5000);
+}
+
+function getNotificationIcon(type) {
+    const icons = {
+        success: 'check-circle',
+        error: 'exclamation-circle',
+        warning: 'exclamation-triangle',
+        info: 'info-circle'
+    };
+    return icons[type] || 'info-circle';
+}
+
+// Close modals when clicking outside
+window.onclick = function(event) {
+    const modals = document.querySelectorAll('.modal');
+    modals.forEach(modal => {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
         }
     });
 
-    const newIndex = (currentIndex + direction + slides.length) % slides.length;
-    showFeaturedSlide(newIndex);
+    // Close user dropdown when clicking outside
+    const userDropdown = document.getElementById('userDropdown');
+    if (userDropdown && !event.target.closest('.user-menu')) {
+        userDropdown.classList.remove('active');
+    }
+};
 
+// Handle form submissions
+document.addEventListener('submit', function(e) {
+    if (e.target.id === 'loginForm') {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const credentials = {
+            email: formData.get('email'),
+            password: formData.get('password')
+        };
+        loginUser(credentials);
+    }
+
+    if (e.target.id === 'registerForm') {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const password = formData.get('password');
+        const confirmPassword = formData.get('confirmPassword');
+
+        if (password !== confirmPassword) {
+            showNotification('Passwords do not match', 'error');
+            return;
+        }
+
+        const userData = {
+            name: formData.get('name'),
+            email: formData.get('email'),
+            password: password
+        };
+        registerUser(userData);
+    }
+});
+
+function addLog(action, details) {
+    const userId = currentUser ? currentUser.id : null;
+    fetch('php/admin_api.php?action=add_log', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ user_id: userId, action: action, details: details })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (!data.success) {
+            console.error('Failed to add log');
+        }
+    })
+    .catch(error => {
+        console.error('Error adding log:', error);
+    });
+}
+
+// Hero Slideshow Functions
+let heroSlideIndex = 0;
+let heroSlideshowInterval;
+
+function initializeHeroSlideshow() {
+    const slides = document.querySelectorAll('.hero-slide');
+    const indicators = document.querySelectorAll('.hero-slide-indicators .hero-indicator');
+    
+    if (slides.length === 0) return;
+    
+    // Show first slide initially
+    showHeroSlide(0);
+    
+    // Auto-advance slides every 5 seconds
+    heroSlideshowInterval = setInterval(() => {
+        changeHeroSlide(1);
+    }, 5000);
+    
+    // Pause on hover
+    const slideshow = document.querySelector('.hero-slideshow-container');
+    if (slideshow) {
+        slideshow.addEventListener('mouseenter', () => clearInterval(heroSlideshowInterval));
+        slideshow.addEventListener('mouseleave', () => {
+            heroSlideshowInterval = setInterval(() => {
+                changeHeroSlide(1);
+            }, 5000);
+        });
+    }
+}
+
+function showHeroSlide(index) {
+    const slides = document.querySelectorAll('.hero-slide');
+    const indicators = document.querySelectorAll('.hero-slide-indicators .hero-indicator');
+    
+    if (slides.length === 0) return;
+    
+    // Remove active class from all slides and indicators
+    slides.forEach(slide => slide.classList.remove('active'));
+    indicators.forEach(indicator => indicator.classList.remove('active'));
+    
+    // Add active class to current slide and indicator
+    slides[index].classList.add('active');
+    if (indicators[index]) {
+        indicators[index].classList.add('active');
+    }
+    
+    heroSlideIndex = index;
+}
+
+function changeHeroSlide(direction) {
+    const slides = document.querySelectorAll('.hero-slide');
+    if (slides.length === 0) return;
+    
+    heroSlideIndex += direction;
+    
+    // Handle wraparound
+    if (heroSlideIndex >= slides.length) {
+        heroSlideIndex = 0;
+    } else if (heroSlideIndex < 0) {
+        heroSlideIndex = slides.length - 1;
+    }
+    
+    showHeroSlide(heroSlideIndex);
+    
+    // Reset auto-advance timer
+    clearInterval(heroSlideshowInterval);
+    heroSlideshowInterval = setInterval(() => {
+        changeHeroSlide(1);
+    }, 5000);
+}
+
+function currentHeroSlide(slideNumber) {
+    const targetIndex = slideNumber - 1; // Convert to 0-based index
+    showHeroSlide(targetIndex);
+    
+    // Reset auto-advance timer
+    clearInterval(heroSlideshowInterval);
+    heroSlideshowInterval = setInterval(() => {
+        changeHeroSlide(1);
+    }, 5000);
+}
+
+// Featured Artifacts Slideshow Functions
+let featuredSlideIndex = 0;
+let featuredSlideshowInterval;
+
+function initializeFeaturedSlideshow() {
+    const slides = document.querySelectorAll('.featured-slide');
+    const indicators = document.querySelectorAll('.slide-indicators .indicator');
+    
+    if (slides.length === 0) return;
+    
+    // Show first slide initially
+    showFeaturedSlide(0);
+    
+    // Auto-advance slides every 6 seconds
+    featuredSlideshowInterval = setInterval(() => {
+        changeSlide(1);
+    }, 6000);
+    
+    // Pause on hover
+    const slideshow = document.querySelector('.featured-slideshow-container');
+    if (slideshow) {
+        slideshow.addEventListener('mouseenter', () => clearInterval(featuredSlideshowInterval));
+        slideshow.addEventListener('mouseleave', () => {
+            featuredSlideshowInterval = setInterval(() => {
+                changeSlide(1);
+            }, 6000);
+        });
+    }
+}
+
+function showFeaturedSlide(index) {
+    const slides = document.querySelectorAll('.featured-slide');
+    const indicators = document.querySelectorAll('.slide-indicators .indicator');
+    
+    if (slides.length === 0) return;
+    
+    // Remove active class from all slides and indicators
+    slides.forEach(slide => slide.classList.remove('active'));
+    indicators.forEach(indicator => indicator.classList.remove('active'));
+    
+    // Add active class to current slide and indicator
+    slides[index].classList.add('active');
+    if (indicators[index]) {
+        indicators[index].classList.add('active');
+    }
+    
+    featuredSlideIndex = index;
+}
+
+function changeSlide(direction) {
+    const slides = document.querySelectorAll('.featured-slide');
+    if (slides.length === 0) return;
+    
+    featuredSlideIndex += direction;
+    
+    // Handle wraparound
+    if (featuredSlideIndex >= slides.length) {
+        featuredSlideIndex = 0;
+    } else if (featuredSlideIndex < 0) {
+        featuredSlideIndex = slides.length - 1;
+    }
+    
+    showFeaturedSlide(featuredSlideIndex);
+    
     // Reset auto-advance timer
     clearInterval(featuredSlideshowInterval);
     featuredSlideshowInterval = setInterval(() => {
-        changeFeaturedSlide(1);
+        changeSlide(1);
     }, 6000);
 }
 
-function currentFeaturedSlide(slideNumber) {
+function currentSlide(slideNumber) {
     const targetIndex = slideNumber - 1; // Convert to 0-based index
     showFeaturedSlide(targetIndex);
     
     // Reset auto-advance timer
     clearInterval(featuredSlideshowInterval);
     featuredSlideshowInterval = setInterval(() => {
-        changeFeaturedSlide(1);
+        changeSlide(1);
     }, 6000);
 }
 
@@ -862,12 +939,3 @@ window.currentSlide = currentSlide;
 window.changeHeroSlide = changeHeroSlide;
 window.currentHeroSlide = currentHeroSlide;
 window.loadArtifactsByGallery = loadArtifactsByGallery;
-window.galleryScrollFeatured = function(direction) {
-    const galleryContainer = document.querySelector('.featured-slideshow-container .gallery-card-container');
-    if(galleryContainer) {
-        galleryContainer.scrollBy({
-            left: direction * 320, // Adjust scroll distance as needed
-            behavior: 'smooth'
-        });
-    }
-};

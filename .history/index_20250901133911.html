@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liberation War Museum Archive - Preserving Our Heritage</title>
+    <link rel="icon" type="image/png" href="assets/images/fav.png">
+    <meta name="description" content="Explore the rich history of Bangladesh's Liberation War through our comprehensive digital archive of artifacts, documents, and personal stories.">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Poppins:wght@300;400;500;600;700&family=Crimson+Text:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/map.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="main-header">
+        <div class="header-bg"></div>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo" data-aos="fade-right">
+                    <div class="logo-icon">
+                    <img src="assets/images/logo.png" alt="Logo" style="width:85px; height:auto;">
+                        <div class="logo-glow"></div>
+                    </div>
+                    <div class="logo-text">
+                        <h1>Liberation War Museum</h1>
+                        <span class="logo-subtitle">Digital Archive</span>
+                    </div>
+                </div>
+                <nav class="main-nav" data-aos="fade-down">
+                    <ul>
+                        <li><a href="#home" class="nav-link active">Home</a></li>
+                        <li><a href="#exhibits" class="nav-link">Exhibits</a></li>
+                        <li><a href="#collections" class="nav-link">Collections</a></li>
+                        <li><a href="#about" class="nav-link">About</a></li>
+                    </ul>
+                </nav>
+                <div class="auth-buttons" data-aos="fade-left">
+                    <button class="btn btn-outline btn-glow" onclick="openLoginModal()">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Login
+                    </button>
+                    <button class="btn btn-primary btn-glow" onclick="openRegisterModal()">
+                        <i class="fas fa-user-plus"></i>
+                        Register
+                    </button>
+                </div>
+                <div class="mobile-menu-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-bg-pattern"></div>
+        
+        <!-- Hero Slideshow -->
+        <div class="hero-slideshow-container">
+            <!-- Previous Arrow (Left Side) -->
+            <button class="hero-slideshow-nav prev-btn" onclick="changeHeroSlide(-1)">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            
+            <div class="hero-slideshow">
+                <div class="hero-slide active">
+                    <img src="assets/images/img2.jpg" alt="Liberation War Museum Heritage">
+                </div>
+                
+                <div class="hero-slide">
+                    <img src="assets/images/img3.jpg" alt="Historical Artifacts Collection">
+                </div>
+                
+                <div class="hero-slide">
+                    <img src="assets/images/img4.jpg" alt="Freedom Fighters Memorial">
+                </div>
+                
+                <div class="hero-slide">
+                    <img src="assets/images/img5.jpg" alt="Bangladesh Liberation War History">
+                </div>
+            </div>
+            
+            <!-- Next Arrow (Right Side) -->
+            <button class="hero-slideshow-nav next-btn" onclick="changeHeroSlide(1)">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+            
+            <!-- Slide Indicators -->
+            <div class="hero-slide-indicators">
+                <span class="hero-indicator active" onclick="currentHeroSlide(1)"></span>
+                <span class="hero-indicator" onclick="currentHeroSlide(2)"></span>
+                <span class="hero-indicator" onclick="currentHeroSlide(3)"></span>
+                <span class="hero-indicator" onclick="currentHeroSlide(4)"></span>
+            </div>
+        </div>
+        
+        <!-- Search Box Overlay (Left Side) -->
+        <div class="hero-search-overlay" data-aos="fade-right" data-aos-delay="500">
+            <div class="hero-search-box">
+                <h3>Search Artifacts</h3>
+                <div class="search-input-group">
+                    <select class="search-dropdown" id="slideshowSearchType" aria-label="Search by">
+                        <option value="collection_no">Collection No.</option>
+                        <option value="accession_no">Accession No</option>
+                        <option value="donor">Donor</option>
+                        <option value="object_type">Object Type</option>
+                        <option value="object_head">Object Head</option>
+                    </select>
+                    <input type="text" class="search-input" id="slideshowSearchValue" placeholder="Search artifacts..." aria-label="Search value">
+                    <button class="search-btn" onclick="searchArtifactsFromSlideshow()">
+                        <i class="fas fa-search"></i>
+                        Search
+                    </button>
+                </div>
+                <div class="search-filters">
+                    <button class="filter-btn active" data-filter="all">
+                        <i class="fas fa-th"></i>
+                        All
+                    </button>
+                    <button class="filter-btn" data-filter="documents">
+                        <i class="fas fa-file-alt"></i>
+                        Documents
+                    </button>
+                    <button class="filter-btn" data-filter="weapons">
+                        <i class="fas fa-shield-alt"></i>
+                        Weapons
+                    </button>
+                    <button class="filter-btn" data-filter="personal">
+                        <i class="fas fa-user"></i>
+                        Personal Items
+                    </button>
+                    <button class="filter-btn" data-filter="photos">
+                        <i class="fas fa-camera"></i>
+                        Photos
+                    </button>
+                </div>
+                <div class="search-results">
+                    <p>Search Results: <span id="resultCount">0</span> artifacts found</p>
+                </div>
+            </div>  
+        </div>
+
+        <!-- Hero Text Overlay -->
+        <div class="hero-text" data-aos="fade-up" data-aos-delay="300">
+            <div class="hero-badge">
+                <i class="fas fa-star"></i>
+                <span>Digital Archive</span>
+            </div>
+            <h2 class="hero-title">Liberation War Museum</h2>
+            <p class="hero-subtitle">Explore the artifacts and stories from the Liberation War of Bangladesh</p>
+            <div class="hero-buttons">
+                <button class="btn btn-primary btn-hero" onclick="openExploreModal()">
+                    <i class="fas fa-search"></i>
+                    Explore Exhibits
+                </button>
+                <button class="btn btn-outline btn-hero" onclick="scrollToSection('about')">
+                    <i class="fas fa-info-circle"></i>
+                    Learn More
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Explore Gallery Map Section (from next.html) -->
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-map-marked-alt"></i> Explore Gallery Map</h1>
+            <p class="description">Click on any location point to learn more about the area</p>
+        </header>
+        <div class="map-container">
+            <div class="map-image" id="mapImage">
+                <div class="map-overlay"></div>
+                <!-- Points will be added dynamically with JavaScript -->
+            </div>
+        </div>
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color"></div>
+                <span>Clickable Location Point</span>
+            </div>
+        </div>
+    </div>
+    <div class="overlay" id="overlay"></div>
+    <div class="details-panel" id="detailsPanel">
+        <button class="close-btn" id="closeBtn">&times;</button>
+        <div class="details-content" id="detailsContent">
+            <!-- Content will be loaded dynamically -->
+        </div>
+    </div>
+
+    <!-- Exhibits Section -->
+<section class="exhibits-section" id="exhibits">
+    <div class="container">
+    </div>
+</section>
+
+
+    <!-- Artifacts Section -->
+    <section class="artifacts-section" id="artifacts">
+        <div class="container">
+            <!-- Dynamic Gallery Artifacts (appears when a map point is clicked) -->
+            <div id="galleryArtifactsSection" style="display:none; margin-bottom: 30px;">
+                <div class="gallery-info">
+                    <h2 class="section-title" id="galleryArtifactsTitle">Gallery Artifacts</h2>
+                    <p id="galleryArtifactsDesc"></p>
+                </div>
+                <div class="gallery-slideshow-container">
+                    <button class="slideshow-nav prev-btn" onclick="galleryChangeSlide(-1)"><i class="fas fa-chevron-left"></i></button>
+                    <div class="gallery-slideshow" id="gallerySlideshow"></div>
+                    <button class="slideshow-nav next-btn" onclick="galleryChangeSlide(1)"><i class="fas fa-chevron-right"></i></button>
+                    <div class="gallery-slide-indicators" id="galleryIndicators"></div>
+                </div>
+            </div>
+
+            <h2 class="section-title">Featured Artifacts</h2>
+            
+            <!-- Featured Artifacts Slideshow -->
+            <div class="featured-slideshow-container" data-aos="fade-up">
+                <!-- Previous Arrow (Left Side) -->
+                <button class="slideshow-nav prev-btn" onclick="changeSlide(-1)">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                
+                <div class="featured-slideshow">
+                    <div class="featured-slide active">
+                        <img src="assets/images/img2.jpg" alt="Featured Artifact 1">
+                    </div>
+                    
+                    <div class="featured-slide">
+                        <img src="assets/images/img3.jpg" alt="Featured Artifact 2">
+                    </div>
+                    
+                    <div class="featured-slide">
+                        <img src="assets/images/img4.jpg" alt="Featured Artifact 3">
+                    </div>
+                    
+                    <div class="featured-slide">
+                        <img src="assets/images/img5.jpg" alt="Featured Artifact 4">
+                    </div>
+                </div>
+                
+                <!-- Next Arrow (Right Side) -->
+                <button class="slideshow-nav next-btn" onclick="changeSlide(1)">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+                
+                <!-- Slide Indicators -->
+                <div class="slide-indicators">
+                    <span class="indicator active" onclick="currentSlide(1)"></span>
+                    <span class="indicator" onclick="currentSlide(2)"></span>
+                    <span class="indicator" onclick="currentSlide(3)"></span>
+                    <span class="indicator" onclick="currentSlide(4)"></span>
+                </div>
+            </div>
+            
+            <div class="artifacts-grid" id="artifactsGrid">
+                <!-- Additional artifacts will be loaded here dynamically -->
+            </div>
+            <div id="pagination-container" class="pagination-container">
+                <!-- Pagination will be loaded here by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Collections Section -->
+    <section class="collections-section" id="collections">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <h2 class="section-title">Our Collections</h2>
+                <p class="section-subtitle">Organized archives documenting Bangladesh's path to independence</p>
+            </div>
+            <div class="collections-grid" data-aos="fade-up" data-aos-delay="200">
+                <div class="collection-card" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="collection-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <h3>Historical Documents</h3>
+                    <p>Original documents, letters, and official papers from the Liberation War period</p>
+                    <div class="collection-count">1000+ Items</div>
+                </div>
+                <div class="collection-card" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="collection-icon">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                    <h3>Photographs</h3>
+                    <p>Rare photographs capturing moments of struggle, victory, and everyday life during 1971</p>
+                    <div class="collection-count">500+ Items</div>
+                </div>
+                <div class="collection-card" data-aos="zoom-in" data-aos-delay="300">
+                    <div class="collection-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Military Artifacts</h3>
+                    <p>Weapons, uniforms, and military equipment used during the Liberation War</p>
+                    <div class="collection-count">200+ Items</div>
+                </div>
+                <div class="collection-card" data-aos="zoom-in" data-aos-delay="400">
+                    <div class="collection-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <h3>Personal Items</h3>
+                    <p>Personal belongings, diaries, and memorabilia of freedom fighters and civilians</p>
+                    <div class="collection-count">300+ Items</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section" id="about">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <h2 class="section-title">About Us</h2>
+                <p class="section-subtitle">Preserving the legacy of Bangladesh's Liberation War</p>
+            </div>
+            <div class="about-content">
+                <div class="about-text" data-aos="fade-right">
+                    <h3>Our Mission</h3>
+                    <p>The Liberation War Museum Digital Archive is dedicated to preserving and showcasing the rich history of Bangladesh's struggle for independence. Our comprehensive collection includes artifacts, documents, photographs, and personal stories that tell the story of our nation's journey to freedom.</p>
+                    
+                    <h3>Our Collection</h3>
+                    <p>With over thousands of carefully curated items, our digital archive serves as a bridge between the past and future generations. From historical documents and personal diaries to weapons and memorabilia, each artifact tells a unique story of courage, sacrifice, and determination.</p>
+                    
+                    <h3>Accessibility</h3>
+                    <p>Our digital platform makes these important historical resources accessible to researchers, students, and the general public worldwide. Through advanced search capabilities and detailed documentation, we ensure that the legacy of our liberation war remains alive and accessible.</p>
+                </div>
+                <div class="about-stats" data-aos="fade-left">
+                    <div class="stat-item">
+                        <h4>5000+</h4>
+                        <p>Artifacts</p>
+                    </div>
+                    <div class="stat-item">
+                        <h4>1000+</h4>
+                        <p>Documents</p>
+                    </div>
+                    <div class="stat-item">
+                        <h4>500+</h4>
+                        <p>Photographs</p>
+                    </div>
+                    <div class="stat-item">
+                        <h4>50+</h4>
+                        <p>Years of History</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeLoginModal()">&times;</span>
+            <h2>Login to Your Account</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Email Address</label>
+                    <input type="email" id="loginEmail" name="email" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" name="password" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+            <p class="modal-footer">
+                Don't have an account? <a href="#" onclick="closeLoginModal(); openRegisterModal()">Sign up here</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeRegisterModal()">&times;</span>
+            <h2>Create Your Account</h2>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="registerName">Full Name</label>
+                    <input type="text" id="registerName" name="name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerEmail">Email Address</label>
+                    <input type="email" id="registerEmail" name="email" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Password</label>
+                    <input type="password" id="registerPassword" name="password" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Create Account</button>
+            </form>
+            <p class="modal-footer">
+                Already have an account? <a href="#" onclick="closeRegisterModal(); openLoginModal()">Login here</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-bg-pattern"></div>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section" data-aos="fade-up" data-aos-delay="100">
+                    <div class="footer-logo">
+                        <div class="footer-logo-icon">
+                            <i class="fas fa-landmark"></i>
+                        </div>
+                        <div class="footer-logo-text">
+                            <h3>Liberation War Museum</h3>
+                            <span>Digital Archive</span>
+                        </div>
+                    </div>
+                    <p>Preserving the memory of each new source and the journey to freedom. Our digital archive serves as a bridge between the past and future generations.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section" data-aos="fade-up" data-aos-delay="200">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#home"><i class="fas fa-home"></i> Home</a></li>
+                        <li><a href="#exhibits"><i class="fas fa-search"></i> Exhibits</a></li>
+                        <li><a href="#collections"><i class="fas fa-archive"></i> Collections</a></li>
+                        <li><a href="#about"><i class="fas fa-info-circle"></i> About Us</a></li>
+                        <li><a href="#contact"><i class="fas fa-envelope"></i> Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section" data-aos="fade-up" data-aos-delay="300">
+                    <h3>Contact Information</h3>
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div>
+                                <strong>Address</strong>
+                                <p>5 Segun Bagicha, Dhaka 1000, Bangladesh</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <div>
+                                <strong>Phone</strong>
+                                <p>+880 XXXX-XXXXXX</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <div>
+                                <strong>Email</strong>
+                                <p>info@liberationwarmuseum.org</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-clock"></i>
+                            <div>
+                                <strong>Hours</strong>
+                                <p>Mon-Sat: 9:00 AM - 5:00 PM</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-section" data-aos="fade-up" data-aos-delay="400">
+                    <h3>Newsletter</h3>
+                    <p>Stay updated with our latest exhibitions and events</p>
+                    <div class="newsletter-form">
+                        <input type="email" placeholder="Enter your email" class="newsletter-input">
+                        <button class="newsletter-btn" aria-label="Subscribe to newsletter">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <p>&copy; 2024 Liberation War Museum. All rights reserved.</p>
+                    <div class="footer-bottom-links">
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms of Service</a>
+                        <a href="#">Accessibility</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/map.js"></script>
+
+    <!-- Artifact Modal -->
+    <div id="artifactModal" class="modal artifact-modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeArtifactModal()">&times;</span>
+            <div id="artifactModalBody"></div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liberation War Museum Archive - Preserving Our Heritage</title>
+    <link rel="icon" type="image/png" href="assets/images/fav.png">
+    <meta name="description" content="Explore the rich history of Bangladesh's Liberation War through our comprehensive digital archive of artifacts, documents, and personal stories.">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Poppins:wght@300;400;500;600;700&family=Crimson+Text:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/map.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="main-header">
+        <div class="header-bg"></div>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo" data-aos="fade-right">
+                    <div class="logo-icon">
+                        <img src="assets/images/logo.png" alt="Logo" style="width:85px; height:auto;">
+                    </div>
+                    <div class="logo-text">
+                        <h1>Liberation War Museum</h1>
+                        <span class="logo-subtitle">Digital Archive</span>
+                    </div>
+                </div>
+                <nav class="main-nav" data-aos="fade-down">
+                    <ul>
+                        <li><a href="#home" class="nav-link active">Home</a></li>
+                        <li><a href="#exhibits" class="nav-link">Exhibits</a></li>
+                        <li><a href="#collections" class="nav-link">Collections</a></li>
+                        <li><a href="#about" class="nav-link">About</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-bg-pattern"></div>
+        
+        <!-- Hero Slideshow -->
+        <div class="hero-slideshow-container">
+            <div class="hero-slideshow">
+                <div class="hero-slide active">
+                    <img src="assets/images/img2.jpg" alt="Liberation War Museum Heritage">
+                </div>
+                <div class="hero-slide">
+                    <img src="assets/images/img3.jpg" alt="Historical Artifacts Collection">
+                </div>
+                <div class="hero-slide">
+                    <img src="assets/images/img4.jpg" alt="Freedom Fighters Memorial">
+                </div>
+            </div>
+
+            <button class="hero-slideshow-nav prev-btn" onclick="changeHeroSlide(-1)">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="hero-slideshow-nav next-btn" onclick="changeHeroSlide(1)">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+
+            <div class="hero-slide-indicators">
+                <span class="hero-indicator active" onclick="currentHeroSlide(1)"></span>
+                <span class="hero-indicator" onclick="currentHeroSlide(2)"></span>
+                <span class="hero-indicator" onclick="currentHeroSlide(3)"></span>
+            </div>
+        </div>
+        
+        <!-- Hero Search Box Overlay -->
+        <div class="hero-search-overlay">
+            <div class="hero-search-box">
+                <h3>Search Artifacts</h3>
+                <div class="search-input-group">
+                    <select class="search-dropdown" id="slideshowSearchType">
+                        <option value="collection_no">Collection No.</option>
+                        <option value="accession_no">Accession No</option>
+                        <option value="donor">Donor</option>
+                        <option value="object_type">Object Type</option>
+                        <option value="object_head">Object Head</option>
+                    </select>
+                    <input type="text" class="search-input" id="slideshowSearchValue" placeholder="Search artifacts...">
+                    <button class="search-btn" onclick="searchArtifactsFromSlideshow()">
+                        <i class="fas fa-search"></i>
+                        Search
+                    </button>
+                </div>
+            </div>  
+        </div>
+
+        <!-- Hero Text Overlay -->
+        <div class="hero-text">
+            <h2 class="hero-title">Liberation War Museum</h2>
+            <p class="hero-subtitle">Explore the artifacts and stories from the Liberation War of Bangladesh</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h3>Liberation War Museum</h3>
+                    <span>Digital Archive</span>
+                </div>
+                <div class="social-links">
+                    <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

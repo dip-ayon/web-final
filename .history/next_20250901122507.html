@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Map with Custom Image</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(to bottom, #2c3e50, #4a6491);
+            color: #fff;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 25px;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            border: 2px solid #3498db;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            color: #3498db;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .description {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            color: #f8f9fa;
+        }
+        
+        .instructions {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #3498db;
+        }
+        
+        .instructions code {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        
+        .map-container {
+            position: relative;
+            margin: 30px auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .map-image {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            background: 
+                linear-gradient(rgba(50, 100, 150, 0.3), rgba(50, 100, 150, 0.3)),
+                url('1st.jpg');
+            background-size: cover;
+            background-position: center;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .map-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.1) 0%, rgba(41, 128, 185, 0.1) 100%);
+            border-radius: 10px;
+        }
+        
+        .point {
+            position: absolute;
+            width: 32px;
+            height: 32px;
+            background: #e74c3c;
+            background: radial-gradient(circle, #ff7b50 0%, #e74c3c 100%);
+            border: 3px solid #fff;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(231, 76, 60, 0.8);
+            transition: all 0.3s ease;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .point:hover {
+            transform: scale(1.3);
+            box-shadow: 0 0 25px rgba(231, 76, 60, 1);
+            animation: none;
+        }
+        
+        .point::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(231, 76, 60, 0.4);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s ease, height 0.3s ease;
+        }
+        
+        .point:hover::after {
+            width: 50px;
+            height: 50px;
+        }
+        
+        .point-label {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 20;
+            white-space: nowrap;
+            color: #fff;
+            border: 1px solid #e74c3c;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        
+        .point:hover .point-label {
+            opacity: 1;
+        }
+        
+        .details-panel {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 600px;
+            background: linear-gradient(to bottom right, #2c3e50, #34495e);
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            z-index: 100;
+            padding: 30px;
+            border: 2px solid #3498db;
+            animation: modalAppear 0.3s ease-out;
+        }
+        
+        @keyframes modalAppear {
+            from { opacity: 0; transform: translate(-50%, -48%); }
+            to { opacity: 1; transform: translate(-50%, -50%); }
+        }
+        
+        .details-content h2 {
+            color: #3498db;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(52, 152, 219, 0.3);
+            font-size: 28px;
+        }
+        
+        .details-content p {
+            margin-bottom: 25px;
+            line-height: 1.7;
+            font-size: 18px;
+        }
+        
+        .location-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(45deg, #3498db, #2c3e50);
+            border-radius: 8px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 20px;
+            border: 1px solid #3498db;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 22px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .close-btn:hover {
+            background: #ff6b6b;
+            transform: rotate(90deg);
+        }
+        
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 90;
+            backdrop-filter: blur(5px);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #f8f9fa;
+            font-size: 1rem;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+        }
+        
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #e74c3c;
+            box-shadow: 0 0 10px rgba(231, 76, 60, 0.7);
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .map-image {
+                height: 400px;
+            }
+            
+            .point {
+                width: 24px;
+                height: 24px;
+                font-size: 12px;
+            }
+            
+            .details-content h2 {
+                font-size: 24px;
+            }
+            
+            .details-content p {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-map-marked-alt"></i> Interactive Map</h1>
+            <p class="description">Click on any location point to learn more about the area</p>
+        </header>
+        
+        
+        <div class="map-container">
+            <div class="map-image" id="mapImage">
+                <div class="map-overlay"></div>
+                <!-- Points will be added dynamically with JavaScript -->
+            </div>
+        </div>
+        
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color"></div>
+                <span>Clickable Location Point</span>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 Interactive Map | Explore and Discover</p>
+        </footer>
+    </div>
+    
+    <div class="overlay" id="overlay"></div>
+    
+    <div class="details-panel" id="detailsPanel">
+        <button class="close-btn" id="closeBtn">&times;</button>
+        <div class="details-content" id="detailsContent">
+            <!-- Content will be loaded dynamically -->
+        </div>
+    </div>
+
+    <script>
+        // Location data - coordinates and information
+        const locationsData = [
+            {
+                id: 1,
+                x: 75,
+                y: 35,
+                title: "Main Entrance",
+                content: "The main entrance to the facility with accessibility features, information desk, and security checkpoints. Open 24/7 for authorized personnel.",
+                icon: "fas fa-door-open"
+            },
+            {
+                id: 2,
+                x: 80,
+                y: 25,
+                title: "Conference Center",
+                content: "State-of-the-art conference facilities with capacity for up to 500 people. Features advanced audio-visual equipment and flexible seating arrangements.",
+                icon: "fas fa-users"
+            },
+            {
+                id: 3,
+                x: 35,
+                y: 60,
+                title: "Research Wing",
+                content: "The research and development area with specialized laboratories, testing facilities, and collaboration spaces for innovation projects.",
+                icon: "fas fa-flask"
+            },
+            {
+                id: 4,
+                x: 75,
+                y: 70,
+                title: "Cafeteria",
+                content: "The main dining area offering a variety of meals, snacks, and beverages. Open from 7:00 AM to 7:00 PM on weekdays.",
+                icon: "fas fa-utensils"
+            },
+            {
+                id: 5,
+                x: 45,
+                y: 35,
+                title: "Administration",
+                content: "Administrative offices and support services. Human resources, finance, and facility management are located in this section.",
+                icon: "fas fa-building"
+            },
+            {
+                id: 6,
+                x: 60,
+                y: 50,
+                title: "Library",
+                content: "Resource center with extensive collections of books, journals, and digital resources. Study areas and computer stations available.",
+                icon: "fas fa-book"
+            },
+            {
+                id: 7,
+                x: 25,
+                y: 75,
+                title: "Recreation Area",
+                content: "Employee recreation space with fitness equipment, lounge areas, and outdoor seating. Perfect for breaks and informal meetings.",
+                icon: "fas fa-dumbbell"
+            }
+        ];
+
+        // DOM elements
+        const mapImage = document.getElementById('mapImage');
+        const detailsPanel = document.getElementById('detailsPanel');
+        const detailsContent = document.getElementById('detailsContent');
+        const overlay = document.getElementById('overlay');
+        const closeBtn = document.getElementById('closeBtn');
+
+        // Create points on the map
+        locationsData.forEach(location => {
+            const pointElement = document.createElement('div');
+            pointElement.className = 'point';
+            pointElement.style.left = `${location.x}%`;
+            pointElement.style.top = `${location.y}%`;
+            pointElement.dataset.id = location.id;
+            
+            const icon = document.createElement('i');
+            icon.className = location.icon;
+            pointElement.appendChild(icon);
+            
+            const label = document.createElement('div');
+            label.className = 'point-label';
+            label.textContent = location.title;
+            label.style.top = '-40px';
+            label.style.left = '50%';
+            label.style.transform = 'translateX(-50%)';
+            
+            pointElement.appendChild(label);
+            mapImage.appendChild(pointElement);
+            
+            // Add click event to each point
+            pointElement.addEventListener('click', () => {
+                showLocationDetails(location);
+            });
+        });
+
+        // Show details for a location
+        function showLocationDetails(location) {
+            detailsContent.innerHTML = `
+                <div class="location-image">
+                    <i class="${location.icon} fa-4x"></i>
+                </div>
+                <h2>${location.title}</h2>
+                <p>${location.content}</p>
+                <p><strong>Status:</strong> Open</p>
+                <p><strong>Hours:</strong> Varies by department</p>
+            `;
+            detailsPanel.style.display = 'block';
+            overlay.style.display = 'block';
+        }
+
+        // Close details panel
+        closeBtn.addEventListener('click', closeDetails);
+        overlay.addEventListener('click', closeDetails);
+
+        function closeDetails() {
+            detailsPanel.style.display = 'none';
+            overlay.style.display = 'none';
+        }
+
+        // Close with ESC key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeDetails();
+            }
+        });
+    </script>
+</body>
+</html>

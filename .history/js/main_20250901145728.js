@@ -247,48 +247,53 @@ function renderGalleryArtifacts(artifacts, galleryKey) {
     const section = document.getElementById('galleryArtifactsSection');
     const title = document.getElementById('galleryArtifactsTitle');
     const desc = document.getElementById('galleryArtifactsDesc');
-    const galleryContainer = document.getElementById('gallerySlideshow'); // This is actually the card container now
+    const slideshow = document.getElementById('gallerySlideshow');
     const prevBtn = document.getElementById('galleryPrevBtn');
     const nextBtn = document.getElementById('galleryNextBtn');
-    if (!section || !galleryContainer) return;
+    if (!section || !slideshow) return;
 
     const galleryMeta = getGalleryMeta(galleryKey);
     title.textContent = galleryMeta.title;
     if (desc) desc.textContent = galleryMeta.description;
     section.style.display = 'block';
 
-    galleryContainer.innerHTML = '';
-    galleryContainer.className = 'gallery-card-container';
+    let currentIndex = 0;
+    const itemsPerView = 3;
+    const totalSlides = Math.ceil(artifacts.length / itemsPerView);
 
-    artifacts.forEach((artifact, index) => {
-        const card = document.createElement('div');
-        card.className = 'gallery-artifact-card';
-        card.innerHTML = `
-            <div class="artifact-img">
-                <img src="${artifact.image}" alt="${artifact.title}" onclick="redirectToArtifactDetail(${index})">
-            </div>
-            <div class="artifact-info">
-                <h3>${artifact.title}</h3>
-                <p>${artifact.description}</p>
-            </div>
-        `;
-        galleryContainer.appendChild(card);
-    });
+    function renderSlides() {
+        const startIndex = currentIndex * itemsPerView;
+        const endIndex = Math.min(startIndex + itemsPerView, artifacts.length);
+        
+        slideshow.innerHTML = '';
+        
+        for (let i = startIndex; i < endIndex; i++) {
+            if (artifacts[i]) {
+                const slide = document.createElement('div');
+                slide.className = 'gallery-slide parallax-slide';
+                slide.style.transform = `translateX(${(i - startIndex) * 100}%)`;
+                slide.innerHTML = `
+                    <div class="slide-content">
+                        <img src="${artifacts[i].image}" alt="${artifacts[i].title}" onclick="redirectToArtifactDetail(${i})">
+                        <div class="slide-overlay">
+                            <h3>${artifacts[i].title}</h3>
+                            <p>${artifacts[i].description}</p>
+                        </div>
+                    </div>
+                `;
+                slideshow.appendChild(slide);
+            }
+        }
+        
+        // Show/hide navigation buttons
+        if (prevBtn) prevBtn.style.display = currentIndex > 0 ? 'flex' : 'none';
+        if (nextBtn) nextBtn.style.display = currentIndex < totalSlides - 1 ? 'flex' : 'none';
+    }
 
-    // Show/hide navigation buttons
-    if (prevBtn) prevBtn.style.display = 'flex';
-    if (nextBtn) nextBtn.style.display = 'flex';
-
-    window.galleryScroll = function(direction) {
-        galleryContainer.scrollBy({
-            left: direction * 320, // Adjust scroll distance as needed
-            behavior: 'smooth'
-        });
+    window.galleryChangeSlide = function(direction) {
+        currentIndex = Math.max(0, Math.min(totalSlides - 1, currentIndex + direction));
+        renderSlides();
     };
-
-    // Replace the onclick handlers for the buttons
-    if(prevBtn) prevBtn.setAttribute('onclick', 'galleryScroll(-1)');
-    if(nextBtn) nextBtn.setAttribute('onclick', 'galleryScroll(1)');
 
     window.redirectToArtifactDetail = function(index) {
         const artifact = artifacts[index];
@@ -296,17 +301,39 @@ function renderGalleryArtifacts(artifacts, galleryKey) {
             window.location.href = `artifact_detail.html?id=${artifact.id || index}&title=${encodeURIComponent(artifact.title)}`;
         }
     };
+
+    renderSlides();
 }
 
 // Slideshow functionality
 async function loadSlideshowImages() {
     try {
-        const response = await fetch('php/api.php?action=get_slideshow_images');
-        slideshowImages = await response.json();
+        // Use dummy data instead of API call since backend is not available
+        slideshowImages = [
+            { image_path: 'img1.jpg', caption: 'Liberation War Museum' },
+            { image_path: 'img2.jpg', caption: 'Historical Artifacts' },
+            { image_path: 'img3.jpg', caption: 'Freedom Fighters Memorial' },
+            { image_path: 'img4.jpg', caption: 'War Memorial' },
+            { image_path: 'img5.jpg', caption: 'Museum Collections' }
+        ];
         renderSlideshow();
         startSlideshow();
+        
+        // Uncomment when backend is ready:
+        // const response = await fetch('php/api.php?action=get_slideshow_images');
+        // slideshowImages = await response.json();
+        // renderSlideshow();
+        // startSlideshow();
     } catch (error) {
         console.error('Failed to load slideshow images:', error);
+        // Use fallback dummy data
+        slideshowImages = [
+            { image_path: 'img1.jpg', caption: 'Liberation War Museum' },
+            { image_path: 'img2.jpg', caption: 'Historical Artifacts' },
+            { image_path: 'img3.jpg', caption: 'Freedom Fighters Memorial' }
+        ];
+        renderSlideshow();
+        startSlideshow();
     }
 }
 
@@ -403,7 +430,7 @@ function startSlideshow() {
     const slides = document.querySelectorAll('.slides');
     const indicators = document.querySelectorAll('.indicator');
     
-    if (slides.length === 0) return; 
+    if (slides.length === 0) return;
     
     function showSlide(index) {
         slides.forEach(slide => slide.classList.remove('active'));
@@ -437,7 +464,7 @@ window.plusSlides = function(n) {
     const slides = document.querySelectorAll('.slides');
     const indicators = document.querySelectorAll('.indicator');
     
-    if (slides.length === 0) return; 
+    if (slides.length === 0) return;
     
     currentSlideIndex = (currentSlideIndex + n + slides.length) % slides.length;
     
@@ -462,7 +489,7 @@ window.currentSlide = function(n) {
     const slides = document.querySelectorAll('.slides');
     const indicators = document.querySelectorAll('.indicator');
     
-    if (slides.length === 0) return; 
+    if (slides.length === 0) return;
     
     currentSlideIndex = n - 1;
     
@@ -699,7 +726,7 @@ async function loadArtifacts() {
         const data = await response.json();
         
         if (data && Array.isArray(data.artifacts)) {
-            renderFeaturedArtifactsAsCards(data.artifacts);
+            renderFeaturedArtifactsCoverflow(data.artifacts);
         } else {
             // Fallback: use dummy data
             const dummyArtifacts = [
@@ -734,7 +761,7 @@ async function loadArtifacts() {
                     image: "assets/images/img5.jpg"
                 }
             ];
-            renderFeaturedArtifactsAsCards(dummyArtifacts);
+            renderFeaturedArtifactsCoverflow(dummyArtifacts);
         }
     } catch (error) {
         console.error('Failed to load artifacts:', error);
@@ -771,31 +798,42 @@ async function loadArtifacts() {
                 image: "assets/images/img5.jpg"
             }
         ];
-        renderFeaturedArtifactsAsCards(dummyArtifacts);
+        renderFeaturedArtifactsCoverflow(dummyArtifacts);
     }
 }
 
-function renderFeaturedArtifactsAsCards(artifacts) {
+function renderFeaturedArtifactsCoverflow(artifacts) {
     const container = document.querySelector('.featured-slideshow');
     if (!container) return;
 
     container.innerHTML = '';
-    container.className = 'gallery-card-container';
     
     artifacts.forEach((artifact, index) => {
-        const card = document.createElement('div');
-        card.className = 'gallery-artifact-card';
-        card.innerHTML = `
-            <div class="artifact-img">
-                <img src="${artifact.image}" alt="${artifact.title}" onclick="redirectToArtifactDetail(${index})">
-            </div>
-            <div class="artifact-info">
+        const slide = document.createElement('div');
+        slide.className = 'featured-slide';
+        slide.innerHTML = `
+            <img src="${artifact.image}" alt="${artifact.title}">
+            <div class="featured-slide-content">
                 <h3>${artifact.title}</h3>
                 <p>${artifact.description}</p>
             </div>
         `;
-        container.appendChild(card);
+        container.appendChild(slide);
     });
+
+    // Add navigation buttons
+    const prevBtn = document.createElement('button');
+    prevBtn.className = 'slideshow-nav prev-btn';
+    prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
+    prevBtn.onclick = () => changeFeaturedSlide(-1);
+    
+    const nextBtn = document.createElement('button');
+    nextBtn.className = 'slideshow-nav next-btn';
+    nextBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
+    nextBtn.onclick = () => changeFeaturedSlide(1);
+    
+    container.parentElement.appendChild(prevBtn);
+    container.parentElement.appendChild(nextBtn);
 }
 
 function getArtifactImage(artifact) {
@@ -862,12 +900,3 @@ window.currentSlide = currentSlide;
 window.changeHeroSlide = changeHeroSlide;
 window.currentHeroSlide = currentHeroSlide;
 window.loadArtifactsByGallery = loadArtifactsByGallery;
-window.galleryScrollFeatured = function(direction) {
-    const galleryContainer = document.querySelector('.featured-slideshow-container .gallery-card-container');
-    if(galleryContainer) {
-        galleryContainer.scrollBy({
-            left: direction * 320, // Adjust scroll distance as needed
-            behavior: 'smooth'
-        });
-    }
-};

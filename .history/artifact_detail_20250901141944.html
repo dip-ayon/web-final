@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artifact Detail - Liberation War Museum</title>
+    <link rel="icon" type="image/png" href="assets/images/fav.png">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .artifact-detail-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 20px;
+        }
+        
+        .artifact-detail-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .artifact-detail-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+        
+        .artifact-image-section {
+            position: sticky;
+            top: 20px;
+        }
+        
+        .artifact-image-container {
+            position: relative;
+            background: #f8f8f8;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+        }
+        
+        .artifact-image {
+            width: 100%;
+            height: 500px;
+            object-fit: contain;
+            cursor: zoom-in;
+            transition: transform 0.3s ease;
+        }
+        
+        .artifact-image.zoomed {
+            cursor: zoom-out;
+        }
+        
+        .zoom-controls {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            display: flex;
+            gap: 8px;
+            background: rgba(0,0,0,0.7);
+            padding: 8px;
+            border-radius: 8px;
+        }
+        
+        .zoom-btn {
+            width: 32px;
+            height: 32px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s ease;
+        }
+        
+        .zoom-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .artifact-info-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        }
+        
+        .info-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+        
+        .info-item {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 1rem;
+        }
+        
+        .info-item:last-child {
+            border-bottom: none;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        
+        .info-value {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 768px) {
+            .artifact-detail-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .artifact-image {
+                height: 300px;
+            }
+            
+            .back-btn {
+                position: static;
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="goBack()">
+        <i class="fas fa-arrow-left"></i>
+        Back to Gallery
+    </button>
+    
+    <div class="artifact-detail-container">
+        <div class="artifact-detail-header">
+            <h1 id="artifactTitle">Artifact Detail</h1>
+        </div>
+        
+        <div class="artifact-detail-content">
+            <div class="artifact-image-section">
+                <div class="artifact-image-container">
+                    <img id="artifactImage" class="artifact-image" src="" alt="Artifact Image">
+                    <div class="zoom-controls">
+                        <button class="zoom-btn" onclick="zoomIn()">
+                            <i class="fas fa-search-plus"></i>
+                        </button>
+                        <button class="zoom-btn" onclick="zoomOut()">
+                            <i class="fas fa-search-minus"></i>
+                        </button>
+                        <button class="zoom-btn" onclick="resetZoom()">
+                            <i class="fas fa-expand-arrows-alt"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="artifact-info-section">
+                <div class="info-grid" id="artifactInfo">
+                    <!-- Artifact information will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentZoom = 1;
+        const zoomStep = 0.2;
+        const maxZoom = 3;
+        const minZoom = 0.5;
+        
+        // Get artifact data from URL parameters
+        function getArtifactData() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const artifactId = urlParams.get('id');
+            
+            // For demo purposes, return dummy data
+            // In production, this would fetch from an API
+            return {
+                id: artifactId,
+                title: "Freedom Fighter's Personal Diary",
+                collection_no: "LWM-D-1971-014",
+                accession_no: "ACC-1971-014",
+                collection_date: "1971-03-15",
+                contributor_name: "Abdul Hamid",
+                object_type: "Document",
+                object_head: "Personal Diary",
+                description: "A handwritten diary belonging to a freedom fighter during the Liberation War of Bangladesh. Contains daily entries documenting the struggle for independence.",
+                measurement: "15cm x 10cm x 2cm",
+                image: "assets/images/img1.jpg",
+                gallery_number: "Gallery 1",
+                found_place: "Dhaka, Bangladesh",
+                experiment_formula: "N/A",
+                significance_comment: "This diary provides first-hand account of the liberation struggle and is considered a significant historical document.",
+                correction: "None"
+            };
+        }
+        
+        function populateArtifactDetail() {
+            const artifact = getArtifactData();
+            
+            document.title = `${artifact.title} - Liberation War Museum`;
+            document.getElementById('artifactTitle').textContent = artifact.title;
+            document.getElementById('artifactImage').src = artifact.image;
+            document.getElementById('artifactImage').alt = artifact.title;
+            
+            const infoGrid = document.getElementById('artifactInfo');
+            infoGrid.innerHTML = `
+                <div class="info-item">
+                    <span class="info-label">Collection Number</span>
+                    <span class="info-value">${artifact.collection_no}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Accession Number</span>
+                    <span class="info-value">${artifact.accession_no}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Collection Date</span>
+                    <span class="info-value">${artifact.collection_date}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Contributor Name</span>
+                    <span class="info-value">${artifact.contributor_name}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Object Type</span>
+                    <span class="info-value">${artifact.object_type}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Object Head</span>
+                    <span class="info-value">${artifact.object_head}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Description</span>
+                    <span class="info-value">${artifact.description}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Measurement</span>
+                    <span class="info-value">${artifact.measurement}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Gallery Number</span>
+                    <span class="info-value">${artifact.gallery_number}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Found Place Information</span>
+                    <span class="info-value">${artifact.found_place}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Experiment Formula</span>
+                    <span class="info-value">${artifact.experiment_formula}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Significance Comment</span>
+                    <span class="info-value">${artifact.significance_comment}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Correction</span>
+                    <span class="info-value">${artifact.correction}</span>
+                </div>
+            `;
+        }
+        
+        function zoomIn() {
+            if (currentZoom < maxZoom) {
+                currentZoom += zoomStep;
+                applyZoom();
+            }
+        }
+        
+        function zoomOut() {
+            if (currentZoom > minZoom) {
+                currentZoom -= zoomStep;
+                applyZoom();
+            }
+        }
+        
+        function resetZoom() {
+            currentZoom = 1;
+            applyZoom();
+        }
+        
+        function applyZoom() {
+            const image = document.getElementById('artifactImage');
+            image.style.transform = `scale(${currentZoom})`;
+            image.classList.toggle('zoomed', currentZoom !== 1);
+        }
+        
+        function goBack() {
+            window.history.back();
+        }
+        
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            populateArtifactDetail();
+        });
+    </script>
+</body>
+</html>
